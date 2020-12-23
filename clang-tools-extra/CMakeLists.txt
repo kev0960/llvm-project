@@ -10,6 +10,7 @@ add_subdirectory(clang-tidy)
 
 add_subdirectory(clang-change-namespace)
 add_subdirectory(clang-doc)
+add_subdirectory(clang-format-server)
 add_subdirectory(clang-include-fixer)
 add_subdirectory(clang-move)
 add_subdirectory(clang-query)
