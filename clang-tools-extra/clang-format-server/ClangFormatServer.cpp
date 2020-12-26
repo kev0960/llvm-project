@@ -15,6 +15,13 @@
 using namespace llvm;
 using clang::tooling::Replacements;
 
+static cl::OptionCategory
+    ClangFormatServerCategory("Clang-format-server options");
+
+static cl::opt<unsigned>
+    PortNum("port", cl::desc("Port number that the server listens to"),
+            cl::init(3001), cl::cat(ClangFormatServerCategory));
+
 namespace clang {
 namespace format {
 
@@ -110,12 +117,14 @@ static bool format(StringRef Content, std::string &FormattedCode) {
 int main(int argc, const char **argv) {
   llvm::InitLLVM X(argc, argv);
 
+  cl::ParseCommandLineOptions(argc, argv, "A server that formats C++ code.");
+
   zmq::context_t Context(1);
   zmq::socket_t Socket(Context, ZMQ_REP);
-  Socket.bind("tcp://*:5001");
+  Socket.bind("tcp://*:" + std::to_string(PortNum));
 
   outs() << "---------------------------------\n";
-  outs() << "Server Started. Listening at 3001\n";
+  outs() << "Server Started. Listening at " << PortNum << "\n";
   outs() << "---------------------------------\n";
 
   while (true) {
